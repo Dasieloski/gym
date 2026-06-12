@@ -1,6 +1,7 @@
 const nextConfig = {
   async headers() {
-    const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
+    const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL || vercelUrl || 'http://localhost:3000';
     return [
       {
         source: '/api/:path*',

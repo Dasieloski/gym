@@ -6,7 +6,7 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Definir las páginas públicas
-  const publicPages = ['/', '/registro', '/login', '/403', '/404'];
+  const publicPages = ['/', '/registro', '/login/inicio', '/login/registrarse', '/403', '/404'];
 
   // Si es una página pública, permitir acceso
   if (publicPages.includes(pathname)) {
@@ -33,7 +33,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
       }
 
-      return NextResponse.redirect(new URL('/login', req.url));
+      return NextResponse.redirect(new URL('/login/inicio', req.url));
     }
     // Para otras rutas, permitir acceso
     return NextResponse.next();
