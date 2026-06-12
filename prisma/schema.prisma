@@ -1,0 +1,446 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Usuario {
+  id                   Int            @id @default(autoincrement())
+  nombre               String
+  username             String         @unique
+  password             String
+  carnetIdentidad      String         @unique
+  telefono             String
+  rol                  Rol
+  comoConocio          String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  membresiaActualId    Int?           @unique
+  entrenadorAsignadoId Int?
+  visitasEsteMes       Int?           @default(0)
+  foto                 String?
+  sexo                 Sexo?
+  email                String?
+  instagram            String?
+  fechaNacimiento      DateTime?
+  entrenador           Entrenador?
+  historiales          Historial[]
+  membresias           Membresia[]
+  registrosPeso        RegistroPeso[]
+  reservasCliente      Reserva[]      @relation("ClienteReservas")
+  entrenadorAsignado   Usuario?       @relation("EntrenadorClientes", fields: [entrenadorAsignadoId], references: [id])
+  clientesAsignados    Usuario[]      @relation("EntrenadorClientes")
+  membresiaActual      Membresia?     @relation("MembresiaActual", fields: [membresiaActualId], references: [id])
+  notas                NotaCliente[]
+  pagos                Pago[]
+  checkIns             CheckIn[]
+  notificaciones       Notificacion[]
+  rutinas              Rutina[]       @relation("RutinaCliente")
+  rutinasCreadas       Rutina[]       @relation("RutinaCreador")
+  pagosEntrenador      PagoEntrenador[] @relation("PagosEntrenador")
+  pagosClienteEntrenador PagoEntrenador[] @relation("PagosClienteEntrenador")
+  puntos               Punto[]
+  racha                Racha?
+  encuestasNPS         EncuestaNPS[]
+  recompensaCumpleanios RecompensaCumpleanios?
+  desafios             DesafioUsuario[]
+  notificacionesPush   NotificacionPush[]
+}
+
+model Entrenador {
+  id          Int         @id @default(autoincrement())
+  usuarioId   Int         @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  usuario     Usuario     @relation(fields: [usuarioId], references: [id])
+  historiales Historial[]
+  reservas    Reserva[]   @relation("EntrenadorReservas")
+
+  @@map("Entrenador")
+}
+
+model Membresia {
+  id            Int                  @id @default(autoincrement())
+  tipo          TipoMembresia
+  fechaInicio   DateTime
+  fechaFin      DateTime
+  estadoPago    EstadoPago
+  congelada     Boolean              @default(false)
+  clienteId     Int
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  historiales   Historial[]
+  cliente       Usuario              @relation(fields: [clienteId], references: [id])
+  usuarioActual Usuario?             @relation("MembresiaActual")
+  congelaciones CongelacionMembresia[]
+  pagos         Pago[]
+}
+
+model Reserva {
+  id           Int           @id @default(autoincrement())
+  clienteId    Int
+  entrenadorId Int?
+  estado       EstadoReserva
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  fecha        DateTime
+  historiales  Historial[]
+  cliente      Usuario       @relation("ClienteReservas", fields: [clienteId], references: [id], map: "Reserva_ClienteId_fkey")
+  entrenador   Entrenador?   @relation("EntrenadorReservas", fields: [entrenadorId], references: [id], map: "Reserva_EntrenadorId_fkey")
+}
+
+model Historial {
+  id           Int         @id @default(autoincrement())
+  accion       String
+  descripcion  String
+  usuarioId    Int
+  entrenadorId Int?
+  membresiaId  Int?
+  reservaId    Int?
+  fecha        DateTime    @default(now())
+  entrenador   Entrenador? @relation(fields: [entrenadorId], references: [id], map: "Historial_EntrenadorId_fkey")
+  membresia    Membresia?  @relation(fields: [membresiaId], references: [id], map: "Historial_MembresiaId_fkey")
+  reserva      Reserva?    @relation(fields: [reservaId], references: [id], map: "Historial_ReservaId_fkey")
+  usuario      Usuario     @relation(fields: [usuarioId], references: [id], map: "Historial_UsuarioId_fkey")
+}
+
+model RegistroPeso {
+  id            BigInt    @id @default(autoincrement())
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  fecha         DateTime? @default(now()) @db.Timestamp(6)
+  peso          Float?
+  altura        Float?
+  imc           Float?
+  grasaCorporal Float?
+  cuello        Float?
+  pecho         Float?
+  brazo         Float?
+  cintura       Float?
+  cadera        Float?
+  muslo         Float?
+  gluteo        Float?
+  usuarioId     Int
+  updateAt      DateTime? @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  usuario       Usuario?  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, fecha])
+  @@map("RegistroPeso")
+}
+
+model NotaCliente {
+  id        Int      @id @default(autoincrement())
+  contenido String
+  categoria String
+  clienteId Int
+  creadoPor Int
+  cliente   Usuario  @relation(fields: [clienteId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("NotaCliente")
+}
+
+model CongelacionMembresia {
+  id          Int       @id @default(autoincrement())
+  membresiaId Int
+  fechaInicio DateTime
+  fechaFin    DateTime
+  motivo      String
+  activa      Boolean   @default(true)
+  membresia   Membresia @relation(fields: [membresiaId], references: [id])
+  createdAt   DateTime  @default(now())
+
+  @@map("CongelacionMembresia")
+}
+
+model Gasto {
+  id            Int      @id @default(autoincrement())
+  categoria     String
+  descripcion   String
+  monto         Decimal  @db.Decimal(10, 2)
+  moneda        String   @default("CUP")
+  fecha         DateTime @default(now())
+  metodoPago    String?
+  comprobante   String?
+  registradoPor Int
+  recurrente    Boolean  @default(false)
+  periodicidad  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("Gasto")
+}
+
+model Pago {
+  id          Int       @id @default(autoincrement())
+  clienteId   Int
+  membresiaId Int?
+  monto       Decimal   @db.Decimal(10, 2)
+  moneda      String    @default("CUP")
+  metodoPago  String
+  referencia  String?
+  fechaPago   DateTime  @default(now())
+  notas       String?
+  cliente     Usuario   @relation(fields: [clienteId], references: [id])
+  membresia   Membresia? @relation(fields: [membresiaId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("Pago")
+}
+
+model PagoEntrenador {
+  id           Int      @id @default(autoincrement())
+  entrenadorId Int
+  clienteId    Int
+  monto        Decimal  @db.Decimal(10, 2)
+  moneda       String   @default("CUP")
+  metodoPago   String   @default("EFECTIVO")
+  fechaPago    DateTime @default(now())
+  notas        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  entrenador   Usuario  @relation("PagosEntrenador", fields: [entrenadorId], references: [id])
+  cliente      Usuario  @relation("PagosClienteEntrenador", fields: [clienteId], references: [id])
+
+  @@map("PagoEntrenador")
+}
+
+model CheckIn {
+  id        Int      @id @default(autoincrement())
+  clienteId Int
+  fecha     DateTime @default(now())
+  tipo      String   @default("ENTRADA")
+  metodo    String   @default("MANUAL")
+  pin       String?
+  cliente   Usuario  @relation(fields: [clienteId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([clienteId, fecha])
+  @@map("CheckIn")
+}
+
+model Configuracion {
+  id            Int      @id @default(autoincrement())
+  clave         String   @unique
+  valor         String
+  descripcion   String?
+  updatedAt     DateTime @updatedAt
+
+  @@map("Configuracion")
+}
+
+enum Rol {
+  ADMIN
+  ENTRENADOR
+  CLIENTE
+  CLIENTEESPERA
+}
+
+enum Sexo {
+  MASCULINO
+  FEMENINO
+  OTRO
+}
+
+enum TipoMembresia {
+  MENSUAL
+  TRIMESTRAL
+  ANUAL
+}
+
+enum EstadoPago {
+  PAGADO
+  IMPAGADO
+}
+
+enum EstadoReserva {
+  ACTIVA
+  CANCELADA
+}
+
+model Equipo {
+  id           Int            @id @default(autoincrement())
+  nombre       String
+  categoria    String
+  marca        String?
+  modelo       String?
+  cantidad     Int            @default(1)
+  estado       EstadoEquipo   @default(OPERATIVO)
+  fechaCompra  DateTime?
+  ultimoMantenimiento DateTime?
+  proximoMantenimiento DateTime?
+  notas        String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("Equipo")
+}
+
+model Meta {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  tipo        String   @default("PERSONALIZADA")
+  valorMeta   Int
+  descripcion String?
+  activa      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("Meta")
+}
+
+model Notificacion {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  titulo    String
+  mensaje   String
+  tipo      String   @default("INFO")
+  leida     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@map("Notificacion")
+}
+
+model Rutina {
+  id          Int         @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  clienteId   Int
+  creadorId   Int
+  activa      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  cliente     Usuario     @relation("RutinaCliente", fields: [clienteId], references: [id])
+  creador     Usuario     @relation("RutinaCreador", fields: [creadorId], references: [id])
+  ejercicios  Ejercicio[]
+
+  @@map("Rutina")
+}
+
+model Ejercicio {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  series      Int      @default(3)
+  repeticiones Int     @default(10)
+  peso        Float?
+  diaSemana   String?
+  orden       Int      @default(0)
+  notas       String?
+  rutinaId    Int
+  rutina      Rutina   @relation(fields: [rutinaId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("Ejercicio")
+}
+
+model Punto {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  puntos    Int      @default(0)
+  concepto  String
+  referencia String?
+  createdAt DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId])
+  @@map("Punto")
+}
+
+model Racha {
+  id             Int      @id @default(autoincrement())
+  usuarioId      Int      @unique
+  rachaActual    Int      @default(0)
+  rachaMaxima    Int      @default(0)
+  ultimoCheckIn  DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@map("Racha")
+}
+
+model EncuestaNPS {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int
+  puntuacion Int
+  comentario String?
+  createdAt  DateTime @default(now())
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId])
+  @@map("EncuestaNPS")
+}
+
+model RecompensaCumpleanios {
+  id             Int      @id @default(autoincrement())
+  usuarioId      Int      @unique
+  anio           Int
+  canjeada       Boolean  @default(false)
+  fechaCanje     DateTime?
+  createdAt      DateTime @default(now())
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@map("RecompensaCumpleanios")
+}
+
+model Desafio {
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  tipo        String        @default("ASISTENCIA")
+  meta        Int
+  diasDuracion Int          @default(30)
+  recompensa  Int           @default(0)
+  activo      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  participantes DesafioUsuario[]
+
+  @@map("Desafio")
+}
+
+model DesafioUsuario {
+  id        Int      @id @default(autoincrement())
+  desafioId Int
+  usuarioId Int
+  progreso  Int      @default(0)
+  completado Boolean @default(false)
+  fechaCompletado DateTime?
+  createdAt DateTime @default(now())
+  desafio   Desafio  @relation(fields: [desafioId], references: [id])
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@unique([desafioId, usuarioId])
+  @@map("DesafioUsuario")
+}
+
+model NotificacionPush {
+  id          Int      @id @default(autoincrement())
+  usuarioId   Int
+  titulo      String
+  mensaje     String
+  leida       Boolean  @default(false)
+  enviada     Boolean  @default(false)
+  fechaEnvio  DateTime?
+  createdAt   DateTime @default(now())
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId, leida])
+  @@map("NotificacionPush")
+}
+
+enum EstadoEquipo {
+  OPERATIVO
+  MANTENIMIENTO
+  DANADO
+  RETIRADO
+}

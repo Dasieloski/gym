@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Entrenador" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "Membresia" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "Usuario" ADD COLUMN     "foto" TEXT;
