@@ -157,11 +157,14 @@ export default function ClientsTab({
         transition={{ duration: 0.6 }}
         className="mb-16"
       >
-        <p className="text-[#02F5D4] text-xs uppercase tracking-[0.3em] mb-3">Clientes</p>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#02F5D4] to-[#2272FF] animate-pulse" />
+          <p className="text-[#02F5D4] text-xs uppercase tracking-[0.3em]">Clientes</p>
+        </div>
         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-4">
           Base de <span className="text-outline">Datos</span>
         </h1>
-        <p className="text-slate-400 text-lg max-w-2xl">
+        <p className="text-white/30 text-lg max-w-2xl">
           Gestión completa de clientes activos.
         </p>
       </motion.div>
@@ -169,7 +172,7 @@ export default function ClientsTab({
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
             <input
               type="text"
               placeholder="Buscar..."
@@ -179,7 +182,7 @@ export default function ClientsTab({
                 setSearchClients(e.target.value);
                 setClientsPage(1);
               }}
-              className="w-full bg-white/[0.03] border border-white/10 focus:border-[#02F5D4] pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none transition-colors rounded-xl"
+              className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-[#02F5D4]/40 focus:shadow-[0_0_20px_-8px_rgba(2,245,212,0.15)] pl-11 pr-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none transition-all rounded-xl"
             />
           </div>
         </div>
@@ -188,22 +191,22 @@ export default function ClientsTab({
           <select
             value={clientsFilterMembership}
             onChange={(e) => { setClientsFilterMembership(e.target.value); setClientsPage(1); }}
-            className="bg-white/[0.03] border border-white/10 focus:border-[#02F5D4] px-3 py-2 text-xs text-white focus:outline-none transition-colors rounded-lg"
+            className="bg-white/[0.03] border border-white/[0.08] focus:border-[#02F5D4]/40 px-3 py-2 text-xs text-white focus:outline-none transition-all rounded-xl"
           >
-            <option value="all" className="bg-[#050505]">Membresías</option>
-            <option value="active" className="bg-[#050505]">Activa</option>
-            <option value="expired" className="bg-[#050505]">Vencida</option>
-            <option value="none" className="bg-[#050505]">Sin</option>
+            <option value="all" className="bg-[#0a0a0a]">Membresías</option>
+            <option value="active" className="bg-[#0a0a0a]">Activa</option>
+            <option value="expired" className="bg-[#0a0a0a]">Vencida</option>
+            <option value="none" className="bg-[#0a0a0a]">Sin</option>
           </select>
           <select
             value={clientsFilterTrainer}
             onChange={(e) => { setClientsFilterTrainer(e.target.value); setClientsPage(1); }}
-            className="bg-white/[0.03] border border-white/10 focus:border-[#02F5D4] px-3 py-2 text-xs text-white focus:outline-none transition-colors rounded-lg"
+            className="bg-white/[0.03] border border-white/[0.08] focus:border-[#02F5D4]/40 px-3 py-2 text-xs text-white focus:outline-none transition-all rounded-xl"
           >
-            <option value="all" className="bg-[#050505]">Entrenador</option>
-            <option value="none" className="bg-[#050505]">Sin</option>
+            <option value="all" className="bg-[#0a0a0a]">Entrenador</option>
+            <option value="none" className="bg-[#0a0a0a]">Sin</option>
             {trainers.map((trainer) => (
-              <option key={trainer.id} value={trainer.id.toString()} className="bg-[#050505]">
+              <option key={trainer.id} value={trainer.id.toString()} className="bg-[#0a0a0a]">
                 {trainer.nombre}
               </option>
             ))}
@@ -211,26 +214,26 @@ export default function ClientsTab({
           <select
             value={sortBy}
             onChange={(e) => { setSortBy(e.target.value); setClientsPage(1); }}
-            className="bg-white/[0.03] border border-white/10 focus:border-[#02F5D4] px-3 py-2 text-xs text-white focus:outline-none transition-colors rounded-lg"
+            className="bg-white/[0.03] border border-white/[0.08] focus:border-[#02F5D4]/40 px-3 py-2 text-xs text-white focus:outline-none transition-all rounded-xl"
           >
-            <option value="nombre" className="bg-[#050505]">Nombre</option>
-            <option value="id" className="bg-[#050505]">ID</option>
-            <option value="membresiaActual.tipo" className="bg-[#050505]">Tipo</option>
+            <option value="nombre" className="bg-[#0a0a0a]">Nombre</option>
+            <option value="id" className="bg-[#0a0a0a]">ID</option>
+            <option value="membresiaActual.tipo" className="bg-[#0a0a0a]">Tipo</option>
           </select>
           <div className="flex gap-1 ml-auto">
             <button
               onClick={exportCSV}
-              className="p-2 border border-white/20 text-slate-400 hover:border-[#02F5D4] hover:text-[#02F5D4] transition-colors"
+              className="p-2.5 border border-white/[0.08] text-white/30 hover:border-[#02F5D4]/40 hover:text-[#02F5D4] hover:bg-[#02F5D4]/5 transition-all rounded-xl"
               title="Exportar CSV"
             >
               <Download size={14} />
             </button>
             <button
               onClick={() => setClientsViewMode("cards")}
-              className={`p-2 border transition-colors ${
+              className={`p-2.5 border transition-all rounded-xl ${
                 clientsViewMode === "cards"
-                  ? "border-[#02F5D4] text-[#02F5D4]"
-                  : "border-white/20 text-slate-400 hover:border-white/40"
+                  ? "border-[#02F5D4]/40 text-[#02F5D4] bg-[#02F5D4]/5"
+                  : "border-white/[0.08] text-white/30 hover:border-white/20 hover:text-white/50"
               }`}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -239,10 +242,10 @@ export default function ClientsTab({
             </button>
             <button
               onClick={() => setClientsViewMode("list")}
-              className={`p-2 border transition-colors ${
+              className={`p-2.5 border transition-all rounded-xl ${
                 clientsViewMode === "list"
-                  ? "border-[#02F5D4] text-[#02F5D4]"
-                  : "border-white/20 text-slate-400 hover:border-white/40"
+                  ? "border-[#02F5D4]/40 text-[#02F5D4] bg-[#02F5D4]/5"
+                  : "border-white/[0.08] text-white/30 hover:border-white/20 hover:text-white/50"
               }`}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -253,7 +256,7 @@ export default function ClientsTab({
         </div>
       </div>
 
-      <p className="text-slate-500 text-sm mb-6">
+      <p className="text-white/20 text-sm mb-6">
         Mostrando {Math.min((clientsPage - 1) * clientsPerPage + 1, sortedClientsLength)} -{" "}
         {Math.min(clientsPage * clientsPerPage, sortedClientsLength)} de {sortedClientsLength} resultados
       </p>
@@ -266,21 +269,21 @@ export default function ClientsTab({
                 ? calculateDaysUntilPayment(client.membresiaActual.fechaFin)
                 : null;
               const roleStyles: Record<string, string> = {
-                ADMIN: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-                ENTRENADOR: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                CLIENTE: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-                CLIENTEESPERA: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+                ADMIN: "badge-premium-purple",
+                ENTRENADOR: "badge-premium-blue",
+                CLIENTE: "badge-premium-green",
+                CLIENTEESPERA: "badge-premium-yellow",
               };
               const rolColor = roleStyles[client.rol] || "bg-white/10 text-white/60";
 
-              let badgeColor = "text-red-400";
               let badgeLabel = "Sin membresía";
+              let badgeClass = "badge-premium-red";
               if (dias !== null) {
                 if (dias >= 0) {
-                  badgeColor = "text-green-400";
+                  badgeClass = "badge-premium-green";
                   badgeLabel = "Activa";
                 } else {
-                  badgeColor = "text-yellow-400";
+                  badgeClass = "badge-premium-yellow";
                   badgeLabel = "Vencida";
                 }
               }
@@ -294,76 +297,80 @@ export default function ClientsTab({
                   transition={{ duration: 0.3, delay: index * 0.02 }}
                   className="group"
                 >
-                  <div className="border-l border-white/20 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition-colors duration-300">
+                  <div className="relative overflow-hidden border border-white/[0.06] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-white/[0.01] p-6 hover:border-white/[0.12] hover:shadow-[0_8px_32px_-8px_rgba(2,245,212,0.08)] transition-all duration-500 rounded-xl">
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="flex items-start gap-4 mb-4">
                       <div className="relative shrink-0">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/20 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity" />
                         <div
-                          className="w-16 h-16 overflow-hidden border-2 border-white/10 group-hover:border-[#02F5D4]/40 transition-colors cursor-pointer"
+                          className="w-16 h-16 overflow-hidden border-2 border-white/[0.08] group-hover:border-[#02F5D4]/30 transition-colors cursor-pointer rounded-full relative"
                           onClick={() => client.foto && handleImageClick(client.foto, client.nombre)}
                         >
                           {client.foto ? (
                             <Image src={client.foto} alt={client.nombre} width={64} height={64} className="object-cover w-full h-full" unoptimized />
                           ) : (
-                            <div className="w-full h-full bg-white/[0.05] flex items-center justify-center">
-                              <Users size={24} className="text-white/40" />
+                            <div className="w-full h-full bg-gradient-to-br from-white/[0.05] to-white/[0.02] flex items-center justify-center">
+                              <Users size={24} className="text-white/20" />
                             </div>
                           )}
                           {client.foto && (
-                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
                               <ZoomIn size={20} className="text-white" />
                             </div>
                           )}
                         </div>
-                        <span className={`absolute -bottom-1 -right-1 w-4 h-4 border-2 border-[#0a0a0a] ${dias !== null && dias >= 0 ? "bg-emerald-500" : "bg-red-500"}`} />
+                        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#0a0a0a] border-2 border-[#0a0a0a] flex items-center justify-center">
+                          <div className={`w-3 h-3 rounded-full ${dias !== null && dias >= 0 ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)]"}`} />
+                        </div>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="text-white font-bold text-lg truncate">{client.nombre}</h3>
-                          <span className={`shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded border ${rolColor}`}>
+                          <span className={`shrink-0 ${rolColor}`}>
                             {client.rol}
                           </span>
                         </div>
-                        <p className="text-slate-500 text-xs font-mono mt-1">ID: {client.id}</p>
-                        <span className={`mt-2 inline-block text-xs font-mono uppercase tracking-wider ${badgeColor}`}>
+                        <p className="text-white/20 text-xs font-mono mt-1">ID: {client.id}</p>
+                        <span className={`mt-2 inline-block ${badgeClass}`}>
                           {badgeLabel}
                         </span>
                       </div>
                     </div>
-                    <div className="space-y-2 mb-4 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Carnet</span>
-                        <span className="text-slate-300">{client.carnetIdentidad}</span>
+                    <div className="space-y-2.5 mb-4 text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/30 text-xs uppercase tracking-wider">Carnet</span>
+                        <span className="text-white/60 font-mono text-xs">{client.carnetIdentidad}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Teléfono</span>
-                        <span className="text-slate-300">{client.telefono}</span>
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/30 text-xs uppercase tracking-wider">Teléfono</span>
+                        <span className="text-white/60">{client.telefono}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Cómo nos conoció</span>
-                        <span className="text-slate-300">{traducirComoConocio(client.comoConocio)}</span>
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/30 text-xs uppercase tracking-wider">Cómo nos conoció</span>
+                        <span className="text-white/60 text-xs">{traducirComoConocio(client.comoConocio)}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Membresía</span>
-                        <span className="text-slate-300">{client.membresiaActual?.tipo || "Sin membresía"}</span>
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/30 text-xs uppercase tracking-wider">Membresía</span>
+                        <span className="text-[#02F5D4] font-medium text-xs">{client.membresiaActual?.tipo || "Sin"}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Entrenador</span>
-                        <span className="text-slate-300 truncate ml-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/30 text-xs uppercase tracking-wider">Entrenador</span>
+                        <span className="text-white/60 truncate ml-4 text-xs">
                           {client.entrenadorAsignado ? client.entrenadorAsignado.nombre : "Sin entrenador"}
                         </span>
                       </div>
                       {dias !== null && (
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Días restantes</span>
-                          <span className={`font-mono ${dias >= 0 ? "text-emerald-400" : "text-yellow-400"}`}>
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/30 text-xs uppercase tracking-wider">Días restantes</span>
+                          <span className={`font-mono font-bold ${dias >= 0 ? "text-emerald-400" : "text-yellow-400"}`}>
                             {dias}
                           </span>
                         </div>
                       )}
                     </div>
-                    <div className="flex gap-2 pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex gap-2 pt-4 border-t border-white/[0.06] opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <button
-                        className="flex-1 px-3 py-2 text-xs bg-white/5 hover:bg-white/10 text-white transition-colors"
+                        className="flex-1 px-3 py-2.5 text-xs bg-white/[0.03] hover:bg-white/[0.08] text-white transition-all rounded-lg border border-white/[0.06] hover:border-white/[0.12]"
                         onClick={() =>
                           handleEditClient({
                             id: client.id,
@@ -379,13 +386,13 @@ export default function ClientsTab({
                       </button>
                       <button
                         onClick={() => setQrClient({ id: client.id, nombre: client.nombre })}
-                        className="px-3 py-2 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-colors"
+                        className="px-3 py-2.5 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-all rounded-lg border border-emerald-500/20 hover:border-emerald-500/40"
                       >
                         <QrCode size={14} />
                       </button>
                       <button
                         onClick={() => handleDelete(client.id, "client")}
-                        className="px-3 py-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                        className="px-3 py-2.5 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all rounded-lg border border-red-500/20 hover:border-red-500/40"
                       >
                         <Trash size={14} />
                       </button>
@@ -404,21 +411,21 @@ export default function ClientsTab({
                 ? calculateDaysUntilPayment(client.membresiaActual.fechaFin)
                 : null;
               const roleStyles: Record<string, string> = {
-                ADMIN: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-                ENTRENADOR: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                CLIENTE: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-                CLIENTEESPERA: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+                ADMIN: "badge-premium-purple",
+                ENTRENADOR: "badge-premium-blue",
+                CLIENTE: "badge-premium-green",
+                CLIENTEESPERA: "badge-premium-yellow",
               };
               const rolColor = roleStyles[client.rol] || "bg-white/10 text-white/60";
 
-              let badgeColor = "text-red-400";
+              let badgeClass = "badge-premium-red";
               let badgeLabel = "Sin membresía";
               if (dias !== null) {
                 if (dias >= 0) {
-                  badgeColor = "text-green-400";
+                  badgeClass = "badge-premium-green";
                   badgeLabel = "Activa";
                 } else {
-                  badgeColor = "text-yellow-400";
+                  badgeClass = "badge-premium-yellow";
                   badgeLabel = "Vencida";
                 }
               }
@@ -432,14 +439,15 @@ export default function ClientsTab({
                   transition={{ duration: 0.3, delay: index * 0.02 }}
                   className="group"
                 >
-                  <div className="flex items-center gap-4 p-4 border-l-2 border-white/10 hover:border-[#02F5D4] bg-white/[0.01] hover:bg-white/[0.03] transition-all">
+                  <div className="flex items-center gap-4 p-4 border border-white/[0.04] hover:border-[#02F5D4]/20 bg-gradient-to-r from-white/[0.01] to-transparent hover:from-white/[0.02] transition-all rounded-xl">
                     <div className="relative shrink-0">
-                      <div className="w-12 h-12 overflow-hidden border border-white/10">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#02F5D4]/10 to-[#2272FF]/10 rounded-full blur-md opacity-30" />
+                      <div className="w-12 h-12 overflow-hidden border border-white/[0.08] rounded-full relative">
                         {client.foto ? (
                           <Image src={client.foto} alt={client.nombre} width={48} height={48} className="object-cover w-full h-full" unoptimized />
                         ) : (
-                          <div className="w-full h-full bg-white/[0.05] flex items-center justify-center">
-                            <Users size={20} className="text-white/40" />
+                          <div className="w-full h-full bg-gradient-to-br from-white/[0.05] to-white/[0.02] flex items-center justify-center">
+                            <Users size={20} className="text-white/20" />
                           </div>
                         )}
                       </div>
@@ -448,37 +456,37 @@ export default function ClientsTab({
                       <div className="col-span-12 md:col-span-3">
                         <div className="flex items-center gap-2">
                           <p className="text-white font-bold truncate">{client.nombre}</p>
-                          <span className={`shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded border ${rolColor}`}>
+                          <span className={`shrink-0 ${rolColor}`}>
                             {client.rol}
                           </span>
                         </div>
-                        <p className="text-slate-600 text-xs font-mono mt-1">CI: {client.carnetIdentidad}</p>
+                        <p className="text-white/20 text-xs font-mono mt-1">CI: {client.carnetIdentidad}</p>
                       </div>
                       <div className="col-span-6 md:col-span-2">
-                        <p className="text-slate-500 text-xs uppercase tracking-wider mb-1">Estado</p>
-                        <span className={`text-xs font-mono uppercase tracking-wider ${badgeColor}`}>
+                        <p className="text-white/20 text-xs uppercase tracking-wider mb-1">Estado</p>
+                        <span className={`${badgeClass}`}>
                           {badgeLabel}
                         </span>
                       </div>
                       <div className="col-span-6 md:col-span-2">
-                        <p className="text-slate-500 text-xs uppercase tracking-wider mb-1">Cómo nos conoció</p>
-                        <p className="text-slate-300 text-sm">{traducirComoConocio(client.comoConocio)}</p>
+                        <p className="text-white/20 text-xs uppercase tracking-wider mb-1">Cómo nos conoció</p>
+                        <p className="text-white/50 text-sm">{traducirComoConocio(client.comoConocio)}</p>
                       </div>
                       <div className="col-span-12 md:col-span-2">
-                        <p className="text-slate-500 text-xs uppercase tracking-wider mb-1">Entrenador</p>
-                        <p className="text-slate-300 text-sm truncate">
+                        <p className="text-white/20 text-xs uppercase tracking-wider mb-1">Entrenador</p>
+                        <p className="text-white/50 text-sm truncate">
                           {client.entrenadorAsignado ? client.entrenadorAsignado.nombre : "Sin asignar"}
                         </p>
                       </div>
                       <div className="col-span-6 md:col-span-1">
-                        <p className="text-slate-500 text-xs uppercase tracking-wider mb-1">Días</p>
-                        <p className={`font-mono text-sm ${dias !== null && dias >= 0 ? "text-emerald-400" : dias !== null ? "text-yellow-400" : "text-slate-500"}`}>
+                        <p className="text-white/20 text-xs uppercase tracking-wider mb-1">Días</p>
+                        <p className={`font-mono text-sm font-bold ${dias !== null && dias >= 0 ? "text-emerald-400" : dias !== null ? "text-yellow-400" : "text-white/20"}`}>
                           {dias !== null ? dias : "-"}
                         </p>
                       </div>
-                      <div className="col-span-6 md:col-span-2 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="col-span-6 md:col-span-2 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                         <button
-                          className="px-3 py-1 text-xs bg-white/5 hover:bg-white/10 text-white transition-colors"
+                          className="px-3 py-1.5 text-xs bg-white/[0.03] hover:bg-white/[0.08] text-white transition-all rounded-lg border border-white/[0.06] hover:border-white/[0.12]"
                           onClick={() =>
                             handleEditClient({
                               id: client.id,
@@ -493,13 +501,13 @@ export default function ClientsTab({
                         </button>
                         <button
                           onClick={() => setQrClient({ id: client.id, nombre: client.nombre })}
-                          className="px-3 py-1 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-colors"
+                          className="px-3 py-1.5 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-all rounded-lg border border-emerald-500/20 hover:border-emerald-500/40"
                         >
                           <QrCode size={14} />
                         </button>
                         <button
                           onClick={() => handleDelete(client.id, "client")}
-                          className="px-3 py-1 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                          className="px-3 py-1.5 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all rounded-lg border border-red-500/20 hover:border-red-500/40"
                         >
                           Eliminar
                         </button>
@@ -515,14 +523,14 @@ export default function ClientsTab({
 
       {totalClientPages > 1 && (
         <div className="flex items-center justify-between pt-8">
-          <span className="text-slate-400 text-sm">
+          <span className="text-white/20 text-sm font-mono">
             Página {clientsPage} de {totalClientPages}
           </span>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setClientsPage((p: number) => Math.max(1, p - 1))}
               disabled={clientsPage === 1}
-              className="p-2 bg-white/5 hover:bg-white/10 text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-white transition-all rounded-xl border border-white/[0.06] hover:border-white/[0.12] disabled:opacity-20 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -534,10 +542,10 @@ export default function ClientsTab({
                 <button
                   key={pageNum}
                   onClick={() => setClientsPage(pageNum)}
-                  className={`w-8 h-8 text-sm font-medium transition-colors ${
+                  className={`w-9 h-9 text-sm font-bold transition-all rounded-xl ${
                     clientsPage === pageNum
-                      ? "bg-[#02F5D4] text-black"
-                      : "bg-white/5 text-white hover:bg-white/10"
+                      ? "bg-gradient-to-r from-[#2272FF] to-[#02F5D4] text-white shadow-[0_0_12px_-4px_rgba(2,245,212,0.3)]"
+                      : "bg-white/[0.03] text-white/50 hover:bg-white/[0.08] hover:text-white/80 border border-white/[0.06]"
                   }`}
                 >
                   {pageNum}
@@ -547,7 +555,7 @@ export default function ClientsTab({
             <button
               onClick={() => setClientsPage((p: number) => Math.min(totalClientPages, p + 1))}
               disabled={clientsPage === totalClientPages}
-              className="p-2 bg-white/5 hover:bg-white/10 text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-white transition-all rounded-xl border border-white/[0.06] hover:border-white/[0.12] disabled:opacity-20 disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -559,7 +567,10 @@ export default function ClientsTab({
       {entrenadoresList.length > 0 && (
         <>
           <div className="mt-16 mb-8">
-            <p className="text-[#2272FF] text-xs uppercase tracking-[0.3em] mb-3">Personal</p>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#2272FF] to-[#02F5D4] animate-pulse" />
+              <p className="text-[#2272FF] text-xs uppercase tracking-[0.3em]">Personal</p>
+            </div>
             <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
               Entrenadores
             </h2>
@@ -567,24 +578,26 @@ export default function ClientsTab({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {entrenadoresList.map((user) => {
               const roleStyles: Record<string, string> = {
-                ADMIN: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-                ENTRENADOR: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                CLIENTE: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-                CLIENTEESPERA: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+                ADMIN: "badge-premium-purple",
+                ENTRENADOR: "badge-premium-blue",
+                CLIENTE: "badge-premium-green",
+                CLIENTEESPERA: "badge-premium-yellow",
               };
               const rolColor = roleStyles[user.rol] || "bg-white/10 text-white/60";
               return (
-                <div key={user.id} className="border-l border-white/20 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition-colors duration-300 group">
+                <div key={user.id} className="relative overflow-hidden border border-white/[0.06] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-white/[0.01] p-6 hover:border-white/[0.12] hover:shadow-[0_8px_32px_-8px_rgba(34,114,255,0.08)] transition-all duration-500 rounded-xl group">
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2272FF]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="flex items-start gap-4 mb-4">
                     <div className="relative shrink-0">
-                      <div className="w-16 h-16 overflow-hidden border-2 border-white/10 group-hover:border-[#2272FF]/40 transition-colors cursor-pointer"
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#2272FF]/20 to-[#02F5D4]/20 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity" />
+                      <div className="w-16 h-16 overflow-hidden border-2 border-white/[0.08] group-hover:border-[#2272FF]/30 transition-colors cursor-pointer rounded-full relative"
                         onClick={() => user.foto && handleImageClick(user.foto, user.nombre)}
                       >
                         {user.foto ? (
                           <Image src={user.foto} alt={user.nombre} width={64} height={64} className="object-cover w-full h-full" unoptimized />
                         ) : (
-                          <div className="w-full h-full bg-white/[0.05] flex items-center justify-center">
-                            <Users size={24} className="text-white/40" />
+                          <div className="w-full h-full bg-gradient-to-br from-white/[0.05] to-white/[0.02] flex items-center justify-center">
+                            <Users size={24} className="text-white/20" />
                           </div>
                         )}
                       </div>
@@ -592,17 +605,17 @@ export default function ClientsTab({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="text-white font-bold text-lg truncate">{user.nombre}</h3>
-                        <span className={`shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded border ${rolColor}`}>
+                        <span className={`shrink-0 ${rolColor}`}>
                           {user.rol}
                         </span>
                       </div>
-                      <p className="text-slate-500 text-xs font-mono mt-1">ID: {user.id}</p>
-                      <p className="text-slate-400 text-sm mt-2">{user.telefono}</p>
+                      <p className="text-white/20 text-xs font-mono mt-1">ID: {user.id}</p>
+                      <p className="text-white/40 text-sm mt-2">{user.telefono}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2 pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-2 pt-4 border-t border-white/[0.06] opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <button
-                      className="flex-1 px-3 py-2 text-xs bg-white/5 hover:bg-white/10 text-white transition-colors"
+                      className="flex-1 px-3 py-2.5 text-xs bg-white/[0.03] hover:bg-white/[0.08] text-white transition-all rounded-lg border border-white/[0.06] hover:border-white/[0.12]"
                       onClick={() =>
                         handleEditClient({
                           id: user.id,
@@ -618,7 +631,7 @@ export default function ClientsTab({
                     </button>
                     <button
                       onClick={() => handleDelete(user.id, "client")}
-                      className="px-3 py-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                      className="px-3 py-2.5 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all rounded-lg border border-red-500/20 hover:border-red-500/40"
                     >
                       <Trash size={14} />
                     </button>
@@ -634,7 +647,10 @@ export default function ClientsTab({
       {otrosList.length > 0 && (
         <>
           <div className="mt-16 mb-8">
-            <p className="text-purple-400 text-xs uppercase tracking-[0.3em] mb-3">Administración</p>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse" />
+              <p className="text-purple-400 text-xs uppercase tracking-[0.3em]">Administración</p>
+            </div>
             <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
               Otros Roles
             </h2>
@@ -642,24 +658,26 @@ export default function ClientsTab({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {otrosList.map((user) => {
               const roleStyles: Record<string, string> = {
-                ADMIN: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-                ENTRENADOR: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                CLIENTE: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-                CLIENTEESPERA: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+                ADMIN: "badge-premium-purple",
+                ENTRENADOR: "badge-premium-blue",
+                CLIENTE: "badge-premium-green",
+                CLIENTEESPERA: "badge-premium-yellow",
               };
               const rolColor = roleStyles[user.rol] || "bg-white/10 text-white/60";
               return (
-                <div key={user.id} className="border-l border-white/20 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition-colors duration-300 group">
+                <div key={user.id} className="relative overflow-hidden border border-white/[0.06] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-white/[0.01] p-6 hover:border-white/[0.12] hover:shadow-[0_8px_32px_-8px_rgba(168,85,247,0.08)] transition-all duration-500 rounded-xl group">
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="flex items-start gap-4 mb-4">
                     <div className="relative shrink-0">
-                      <div className="w-16 h-16 overflow-hidden border-2 border-white/10 group-hover:border-purple-500/40 transition-colors cursor-pointer"
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity" />
+                      <div className="w-16 h-16 overflow-hidden border-2 border-white/[0.08] group-hover:border-purple-500/30 transition-colors cursor-pointer rounded-full relative"
                         onClick={() => user.foto && handleImageClick(user.foto, user.nombre)}
                       >
                         {user.foto ? (
                           <Image src={user.foto} alt={user.nombre} width={64} height={64} className="object-cover w-full h-full" unoptimized />
                         ) : (
-                          <div className="w-full h-full bg-white/[0.05] flex items-center justify-center">
-                            <Users size={24} className="text-white/40" />
+                          <div className="w-full h-full bg-gradient-to-br from-white/[0.05] to-white/[0.02] flex items-center justify-center">
+                            <Users size={24} className="text-white/20" />
                           </div>
                         )}
                       </div>
@@ -667,17 +685,17 @@ export default function ClientsTab({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="text-white font-bold text-lg truncate">{user.nombre}</h3>
-                        <span className={`shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded border ${rolColor}`}>
+                        <span className={`shrink-0 ${rolColor}`}>
                           {user.rol}
                         </span>
                       </div>
-                      <p className="text-slate-500 text-xs font-mono mt-1">ID: {user.id}</p>
-                      <p className="text-slate-400 text-sm mt-2">{user.telefono}</p>
+                      <p className="text-white/20 text-xs font-mono mt-1">ID: {user.id}</p>
+                      <p className="text-white/40 text-sm mt-2">{user.telefono}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2 pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-2 pt-4 border-t border-white/[0.06] opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <button
-                      className="flex-1 px-3 py-2 text-xs bg-white/5 hover:bg-white/10 text-white transition-colors"
+                      className="flex-1 px-3 py-2.5 text-xs bg-white/[0.03] hover:bg-white/[0.08] text-white transition-all rounded-lg border border-white/[0.06] hover:border-white/[0.12]"
                       onClick={() =>
                         handleEditClient({
                           id: user.id,
@@ -693,7 +711,7 @@ export default function ClientsTab({
                     </button>
                     <button
                       onClick={() => handleDelete(user.id, "client")}
-                      className="px-3 py-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                      className="px-3 py-2.5 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all rounded-lg border border-red-500/20 hover:border-red-500/40"
                     >
                       <Trash size={14} />
                     </button>

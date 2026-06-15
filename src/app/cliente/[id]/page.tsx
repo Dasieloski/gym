@@ -219,26 +219,33 @@ export default function ClientPage({ params }: { params: PageParams }) {
                         exit={{ opacity: 0, y: -20 }}
                         className="space-y-6"
                     >
-                        {/* Welcome Header */}
-                        <GlassCard>
-                            <div className="p-6 flex flex-col md:flex-row items-center gap-6">
-                                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#02F5D4]/30 shrink-0">
-                                    {clientInfo.foto ? (
-                                        <Image src={clientInfo.foto} alt="foto" width={96} height={96} className="object-cover w-full h-full" unoptimized />
-                                    ) : (
-                                        <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                                            <User size={40} className="text-white/30" />
-                                        </div>
-                                    )}
+                        {/* Welcome Header - Premium */}
+                        <GlassCard intense glow="cyan" className="premium-glow-subtle">
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#02F5D4]/20 to-transparent" />
+                            <div className="p-8 flex flex-col md:flex-row items-center gap-6">
+                                <div className="relative">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/20 rounded-full blur-xl opacity-50" />
+                                    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#02F5D4]/30 shrink-0 relative ring-2 ring-[#02F5D4]/10 ring-offset-2 ring-offset-[#0a0a0a]">
+                                        {clientInfo.foto ? (
+                                            <Image src={clientInfo.foto} alt="foto" width={96} height={96} className="object-cover w-full h-full" unoptimized />
+                                        ) : (
+                                            <div className="w-full h-full bg-gradient-to-br from-white/5 to-white/[0.02] flex items-center justify-center">
+                                                <User size={40} className="text-white/30" />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] border-2 border-[#02F5D4]/40 flex items-center justify-center">
+                                        <div className={`w-3 h-3 rounded-full ${diasRestantesMembresia !== null && diasRestantesMembresia >= 0 ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)]'}`} />
+                                    </div>
                                 </div>
                                 <div className="flex-1 text-center md:text-left">
                                     <h2 className="text-3xl font-heading font-black text-white mb-1">
-                                        ¡Hola, {clientInfo.nombre.split(' ')[0]}!
+                                        ¡Hola, <span className="gradient-text">{clientInfo.nombre.split(' ')[0]}</span>!
                                     </h2>
-                                    <p className="text-white/50 text-sm mb-3">{motivationalQuote}</p>
+                                    <p className="text-white/40 text-sm mb-4 italic">{'\u201C'}{motivationalQuote}{'\u201D'}</p>
                                     {clientInfo.membresia && (
-                                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#02F5D4]/10 border border-[#02F5D4]/20 rounded-full">
-                                            <span className={`w-2 h-2 rounded-full ${diasRestantesMembresia !== null && diasRestantesMembresia >= 0 ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#02F5D4]/10 to-[#2272FF]/10 border border-[#02F5D4]/20 rounded-full shadow-[0_0_16px_-4px_rgba(2,245,212,0.1)]">
+                                            <span className={`w-2 h-2 rounded-full animate-pulse ${diasRestantesMembresia !== null && diasRestantesMembresia >= 0 ? 'bg-emerald-400' : 'bg-red-400'}`} />
                                             <span className="text-[#02F5D4] text-sm font-medium">
                                                 {clientInfo.membresia.tipo} · {diasRestantesMembresia !== null && diasRestantesMembresia >= 0 ? `${diasRestantesMembresia} días restantes` : 'Vencida'}
                                             </span>
@@ -248,60 +255,76 @@ export default function ClientPage({ params }: { params: PageParams }) {
                             </div>
                         </GlassCard>
 
-                        {/* Quick Stats */}
+                        {/* Quick Stats - Premium */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <GlassCard>
-                                <div className="p-4 text-center">
-                                    <Flame className="w-6 h-6 text-orange-400 mx-auto mb-2" />
-                                    <p className="text-3xl font-heading font-bold text-white">{visitsThisMonth}</p>
-                                    <p className="text-white/40 text-xs">Visitas este mes</p>
+                            <GlassCard glow="cyan" className="premium-card-hover">
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-400/20 to-transparent" />
+                                <div className="p-5 text-center">
+                                    <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/20 flex items-center justify-center">
+                                        <Flame className="w-5 h-5 text-orange-400" />
+                                    </div>
+                                    <p className="text-3xl font-heading font-black stat-value">{visitsThisMonth}</p>
+                                    <p className="text-white/30 text-xs mt-1 uppercase tracking-wider">Visitas este mes</p>
                                 </div>
                             </GlassCard>
-                            <GlassCard>
-                                <div className="p-4 text-center">
-                                    <Calendar className="w-6 h-6 text-[#02F5D4] mx-auto mb-2" />
-                                    <p className="text-3xl font-heading font-bold text-white">{bookings.length}</p>
-                                    <p className="text-white/40 text-xs">Reservas activas</p>
+                            <GlassCard glow="cyan" className="premium-card-hover">
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#02F5D4]/20 to-transparent" />
+                                <div className="p-5 text-center">
+                                    <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/10 border border-[#02F5D4]/20 flex items-center justify-center">
+                                        <Calendar className="w-5 h-5 text-[#02F5D4]" />
+                                    </div>
+                                    <p className="text-3xl font-heading font-black stat-value">{bookings.length}</p>
+                                    <p className="text-white/30 text-xs mt-1 uppercase tracking-wider">Reservas activas</p>
                                 </div>
                             </GlassCard>
-                            <GlassCard>
-                                <div className="p-4 text-center">
-                                    <CreditCard className="w-6 h-6 text-[#2272FF] mx-auto mb-2" />
-                                    <p className="text-lg font-heading font-bold text-white">{clientInfo.membresia?.tipo || 'Sin'}</p>
-                                    <p className="text-white/40 text-xs">Membresía</p>
+                            <GlassCard glow="blue" className="premium-card-hover">
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2272FF]/20 to-transparent" />
+                                <div className="p-5 text-center">
+                                    <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-gradient-to-br from-[#2272FF]/20 to-[#02F5D4]/10 border border-[#2272FF]/20 flex items-center justify-center">
+                                        <CreditCard className="w-5 h-5 text-[#2272FF]" />
+                                    </div>
+                                    <p className="text-lg font-heading font-black text-white">{clientInfo.membresia?.tipo || 'Sin'}</p>
+                                    <p className="text-white/30 text-xs mt-1 uppercase tracking-wider">Membresía</p>
                                 </div>
                             </GlassCard>
                             {clientInfo.entrenadorAsignado && (
-                                <GlassCard>
-                                    <div className="p-4 text-center">
-                                        <User className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+                                <GlassCard glow="purple" className="premium-card-hover">
+                                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/20 to-transparent" />
+                                    <div className="p-5 text-center">
+                                        <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/10 border border-purple-500/20 flex items-center justify-center">
+                                            <User className="w-5 h-5 text-purple-400" />
+                                        </div>
                                         <p className="text-sm font-bold text-white truncate">{clientInfo.entrenadorAsignado.nombre}</p>
-                                        <p className="text-white/40 text-xs">Entrenador</p>
+                                        <p className="text-white/30 text-xs mt-1 uppercase tracking-wider">Entrenador</p>
                                     </div>
                                 </GlassCard>
                             )}
                         </div>
 
-                        {/* Trainer Contact */}
+                        {/* Trainer Contact - Premium */}
                         {clientInfo.entrenadorAsignado && (
-                            <GlassCard>
+                            <GlassCard glow="purple" className="premium-card-hover">
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/20 to-transparent" />
                                 <div className="p-6">
-                                    <h3 className="text-lg font-heading font-bold text-white mb-4">Tu Entrenador</h3>
+                                    <h3 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
+                                        <div className="w-1 h-5 rounded-full bg-gradient-to-b from-purple-400 to-pink-400" />
+                                        Tu Entrenador
+                                    </h3>
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/20 flex items-center justify-center">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/20 flex items-center justify-center shadow-[0_0_16px_-4px_rgba(168,85,247,0.3)]">
                                                 <User className="w-6 h-6 text-purple-400" />
                                             </div>
                                             <div>
-                                                <p className="text-white font-bold">{clientInfo.entrenadorAsignado.nombre}</p>
-                                                <p className="text-white/50 text-sm">{clientInfo.entrenadorAsignado.telefono}</p>
+                                                <p className="text-white font-bold text-lg">{clientInfo.entrenadorAsignado.nombre}</p>
+                                                <p className="text-white/40 text-sm">{clientInfo.entrenadorAsignado.telefono}</p>
                                             </div>
                                         </div>
                                         <a
                                             href={`https://wa.me/${clientInfo.entrenadorAsignado.telefono}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-3 rounded-full bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors"
+                                            className="p-3 rounded-xl bg-gradient-to-br from-green-500/15 to-green-600/10 border border-green-500/20 text-green-400 hover:shadow-[0_0_16px_-4px_rgba(34,197,94,0.3)] hover:border-green-500/40 transition-all duration-300"
                                         >
                                             <MessageSquare size={20} />
                                         </a>
@@ -310,25 +333,31 @@ export default function ClientPage({ params }: { params: PageParams }) {
                             </GlassCard>
                         )}
 
-                        {/* Recent Check-Ins */}
+                        {/* Recent Check-Ins - Premium */}
                         {clientInfo.checkIns && clientInfo.checkIns.length > 0 && (
-                            <GlassCard>
+                            <GlassCard glow="cyan">
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#02F5D4]/20 to-transparent" />
                                 <div className="p-6">
                                     <h3 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
-                                        <Clock size={18} className="text-[#02F5D4]" /> Check-Ins Recientes
+                                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/10 border border-[#02F5D4]/20 flex items-center justify-center mr-1">
+                                            <Clock size={16} className="text-[#02F5D4]" />
+                                        </div>
+                                        Check-Ins Recientes
                                     </h3>
                                     <div className="space-y-2">
                                         {clientInfo.checkIns.slice(0, 5).map(c => (
-                                            <div key={c.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/10">
-                                                <div className="flex items-center gap-2">
-                                                    {c.tipo === 'ENTRADA' ? <LogIn size={16} className="text-emerald-400" /> : <LogOut size={16} className="text-red-400" />}
-                                                    <span className="text-white/70 text-sm">
+                                            <div key={c.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 group">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${c.tipo === 'ENTRADA' ? 'bg-emerald-500/10' : 'bg-red-500/10'}`}>
+                                                        {c.tipo === 'ENTRADA' ? <LogIn size={14} className="text-emerald-400" /> : <LogOut size={14} className="text-red-400" />}
+                                                    </div>
+                                                    <span className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
                                                         {new Date(c.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
                                                         {' '}
-                                                        {new Date(c.fecha).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                                                        <span className="text-white/30">{new Date(c.fecha).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</span>
                                                     </span>
                                                 </div>
-                                                <span className={`text-xs px-2 py-0.5 rounded-full ${c.tipo === 'ENTRADA' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                                                <span className={`text-xs px-2.5 py-1 rounded-lg font-medium ${c.tipo === 'ENTRADA' ? 'badge-premium-green' : 'badge-premium-red'}`}>
                                                     {c.tipo}
                                                 </span>
                                             </div>
@@ -349,25 +378,31 @@ export default function ClientPage({ params }: { params: PageParams }) {
                         className="space-y-6"
                     >
                         {clientInfo.membresia && (
-                            <GlassCard>
-                                <div className="p-6">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h3 className="text-xl font-heading font-bold text-white">Membresía Actual</h3>
-                                        <span className={`px-3 py-1 text-xs rounded-full ${clientInfo.membresia.estadoPago === 'PAGADO' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'}`}>
+                            <GlassCard intense glow="cyan">
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#02F5D4]/20 to-transparent" />
+                                <div className="p-8">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/10 border border-[#02F5D4]/20 flex items-center justify-center">
+                                                <CreditCard size={18} className="text-[#02F5D4]" />
+                                            </div>
+                                            <h3 className="text-xl font-heading font-bold text-white">Membresía Actual</h3>
+                                        </div>
+                                        <span className={`px-3 py-1.5 text-xs rounded-xl font-semibold ${clientInfo.membresia.estadoPago === 'PAGADO' ? 'badge-premium-green' : 'badge-premium-yellow'}`}>
                                             {clientInfo.membresia.estadoPago}
                                         </span>
                                     </div>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                        <div className="p-4 bg-white/[0.02] rounded-xl">
-                                            <p className="text-white/40 text-xs mb-1">Tipo</p>
-                                            <p className="text-2xl font-bold text-[#02F5D4]">{clientInfo.membresia.tipo}</p>
+                                        <div className="p-5 bg-gradient-to-br from-white/[0.04] to-white/[0.01] rounded-xl border border-white/[0.06] hover:border-white/[0.12] transition-all">
+                                            <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Tipo</p>
+                                            <p className="text-2xl font-black text-[#02F5D4]">{clientInfo.membresia.tipo}</p>
                                         </div>
-                                        <div className="p-4 bg-white/[0.02] rounded-xl">
-                                            <p className="text-white/40 text-xs mb-1">Inicio</p>
+                                        <div className="p-5 bg-gradient-to-br from-white/[0.04] to-white/[0.01] rounded-xl border border-white/[0.06] hover:border-white/[0.12] transition-all">
+                                            <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Inicio</p>
                                             <p className="text-xl font-bold text-white">{formatDateSimple(clientInfo.membresia.fechaInicio)}</p>
                                         </div>
-                                        <div className="p-4 bg-white/[0.02] rounded-xl">
-                                            <p className="text-white/40 text-xs mb-1">Vence</p>
+                                        <div className="p-5 bg-gradient-to-br from-white/[0.04] to-white/[0.01] rounded-xl border border-white/[0.06] hover:border-white/[0.12] transition-all">
+                                            <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Vence</p>
                                             <p className="text-xl font-bold text-white">{formatDateSimple(clientInfo.membresia.fechaFin)}</p>
                                         </div>
                                     </div>
@@ -375,46 +410,57 @@ export default function ClientPage({ params }: { params: PageParams }) {
                             </GlassCard>
                         )}
 
-                        {/* QR Code */}
-                        <GlassCard>
-                            <div className="p-6 text-center">
-                                <h3 className="text-lg font-heading font-bold text-white mb-4 flex items-center justify-center gap-2">
-                                    <QrCode size={18} className="text-[#02F5D4]" /> Tu Código QR
-                                </h3>
-                                <p className="text-white/40 text-sm mb-4">Presenta este código al llegar al gimnasio para registrar tu entrada</p>
-                                <div className="inline-block p-4 bg-white rounded-2xl">
+                        {/* QR Code - Premium */}
+                        <GlassCard intense glow="cyan" className="premium-glow-subtle">
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#02F5D4]/20 to-transparent" />
+                            <div className="p-8 text-center">
+                                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/10 border border-[#02F5D4]/20 flex items-center justify-center">
+                                    <QrCode size={24} className="text-[#02F5D4]" />
+                                </div>
+                                <h3 className="text-xl font-heading font-bold text-white mb-2">Tu Código QR</h3>
+                                <p className="text-white/30 text-sm mb-6">Presenta este código al llegar al gimnasio para registrar tu entrada</p>
+                                <div className="inline-block p-6 bg-gradient-to-br from-white to-white/95 rounded-2xl shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)]">
                                     <QRCodeSVG value={`GYM:${clientInfo.id}`} size={180} level="H" />
                                 </div>
-                                <p className="text-white/30 text-xs mt-4">ID: {clientInfo.id}</p>
+                                <p className="text-white/20 text-xs mt-4 font-mono">ID: {clientInfo.id}</p>
                             </div>
                         </GlassCard>
 
                         <GlassCard>
-                            <div className="p-6">
-                                <h3 className="text-xl font-heading font-bold text-white mb-6">Historial de Membresías</h3>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                            <div className="p-8">
+                                <h3 className="text-xl font-heading font-bold text-white mb-6 flex items-center gap-3">
+                                    <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#2272FF] to-[#02F5D4]" />
+                                    Historial de Membresías
+                                </h3>
                                 {clientInfo.membresias.length > 0 ? (
                                     <div className="space-y-3">
                                         {clientInfo.membresias.map((m) => (
-                                            <div key={m.id} className={`p-4 rounded-xl border ${clientInfo.membresia?.id === m.id ? 'border-[#02F5D4]/30 bg-[#02F5D4]/5' : 'border-white/10 bg-white/[0.02]'}`}>
+                                            <div key={m.id} className={`p-5 rounded-xl border transition-all duration-300 ${clientInfo.membresia?.id === m.id ? 'border-[#02F5D4]/20 bg-gradient-to-r from-[#02F5D4]/5 to-transparent shadow-[0_0_16px_-8px_rgba(2,245,212,0.1)]' : 'border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12]'}`}>
                                                 <div className="flex items-center justify-between">
                                                     <div>
-                                                        <p className="text-white font-bold">{m.tipo}</p>
-                                                        <p className="text-white/50 text-sm">{formatDateSimple(m.fechaInicio)} - {formatDateSimple(m.fechaFin)}</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <p className="text-white font-bold text-lg">{m.tipo}</p>
+                                                            {clientInfo.membresia?.id === m.id && (
+                                                                <span className="badge-premium-cyan">Actual</span>
+                                                            )}
+                                                        </div>
+                                                        <p className="text-white/40 text-sm mt-1">{formatDateSimple(m.fechaInicio)} - {formatDateSimple(m.fechaFin)}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <span className={`px-2 py-1 text-xs rounded-md ${m.estadoPago === 'PAGADO' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
+                                                        <span className={`px-3 py-1.5 text-xs rounded-lg font-semibold ${m.estadoPago === 'PAGADO' ? 'badge-premium-green' : 'badge-premium-yellow'}`}>
                                                             {m.estadoPago}
                                                         </span>
-                                                        {clientInfo.membresia?.id === m.id && (
-                                                            <span className="ml-2 px-2 py-1 text-xs rounded-md bg-[#02F5D4]/10 text-[#02F5D4]">Actual</span>
-                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-white/40 text-center py-8">No hay historial de membresías</p>
+                                    <div className="text-center py-12">
+                                        <CreditCard size={32} className="text-white/10 mx-auto mb-3" />
+                                        <p className="text-white/30 text-center">No hay historial de membresías</p>
+                                    </div>
                                 )}
                             </div>
                         </GlassCard>
@@ -429,38 +475,47 @@ export default function ClientPage({ params }: { params: PageParams }) {
                         exit={{ opacity: 0, y: -20 }}
                         className="space-y-6"
                     >
-                        <GlassCard>
-                            <div className="p-6">
-                                <h3 className="text-xl font-heading font-bold text-white mb-6">Historial de Pagos</h3>
+                        <GlassCard intense>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent" />
+                            <div className="p-8">
+                                <h3 className="text-xl font-heading font-bold text-white mb-6 flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20 flex items-center justify-center">
+                                        <DollarSign size={18} className="text-emerald-400" />
+                                    </div>
+                                    Historial de Pagos
+                                </h3>
                                 {clientInfo.pagos && clientInfo.pagos.length > 0 ? (
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-left">
                                             <thead>
-                                                <tr className="border-b border-white/10">
-                                                    <th className="pb-3 text-white/50 text-sm font-medium pr-4">Fecha</th>
-                                                    <th className="pb-3 text-white/50 text-sm font-medium pr-4">Monto</th>
-                                                    <th className="pb-3 text-white/50 text-sm font-medium pr-4">Moneda</th>
-                                                    <th className="pb-3 text-white/50 text-sm font-medium pr-4">Método</th>
-                                                    <th className="pb-3 text-white/50 text-sm font-medium">Referencia</th>
+                                                <tr className="border-b border-white/[0.06]">
+                                                    <th className="pb-3 text-white/30 text-xs font-medium pr-4 uppercase tracking-wider">Fecha</th>
+                                                    <th className="pb-3 text-white/30 text-xs font-medium pr-4 uppercase tracking-wider">Monto</th>
+                                                    <th className="pb-3 text-white/30 text-xs font-medium pr-4 uppercase tracking-wider">Moneda</th>
+                                                    <th className="pb-3 text-white/30 text-xs font-medium pr-4 uppercase tracking-wider">Método</th>
+                                                    <th className="pb-3 text-white/30 text-xs font-medium uppercase tracking-wider">Referencia</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {clientInfo.pagos.map(p => (
-                                                    <tr key={p.id} className="border-b border-white/5">
-                                                        <td className="py-3 text-white text-sm pr-4">{new Date(p.fechaPago).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                                                        <td className="py-3 text-white font-bold text-sm pr-4">${p.monto.toFixed(2)}</td>
-                                                        <td className="py-3 text-sm pr-4">
-                                                            <span className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/80">{p.moneda}</span>
+                                                    <tr key={p.id} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
+                                                        <td className="py-4 text-white/70 text-sm pr-4">{new Date(p.fechaPago).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                                                        <td className="py-4 text-white font-bold text-sm pr-4">${p.monto.toFixed(2)}</td>
+                                                        <td className="py-4 text-sm pr-4">
+                                                            <span className="badge-premium-cyan">{p.moneda}</span>
                                                         </td>
-                                                        <td className="py-3 text-white/70 text-sm pr-4">{p.metodoPago}</td>
-                                                        <td className="py-3 text-white/50 text-sm">{p.referencia || '-'}</td>
+                                                        <td className="py-4 text-white/60 text-sm pr-4">{p.metodoPago}</td>
+                                                        <td className="py-4 text-white/30 text-sm font-mono">{p.referencia || '-'}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </div>
                                 ) : (
-                                    <p className="text-white/40 text-center py-8">No hay pagos registrados</p>
+                                    <div className="text-center py-12">
+                                        <DollarSign size={32} className="text-white/10 mx-auto mb-3" />
+                                        <p className="text-white/30 text-center">No hay pagos registrados</p>
+                                    </div>
                                 )}
                             </div>
                         </GlassCard>
@@ -475,21 +530,27 @@ export default function ClientPage({ params }: { params: PageParams }) {
                         exit={{ opacity: 0, y: -20 }}
                         className="space-y-6"
                     >
-                        <GlassCard>
-                            <div className="p-6">
-                                <h3 className="text-xl font-heading font-bold text-white mb-6">Reservar Sesión</h3>
-                                <div className="flex items-center justify-between mb-4">
-                                    <button onClick={prevMonth} className="p-2 rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors">
+                        <GlassCard intense glow="cyan">
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#02F5D4]/20 to-transparent" />
+                            <div className="p-8">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#02F5D4]/20 to-[#2272FF]/10 border border-[#02F5D4]/20 flex items-center justify-center">
+                                        <Calendar size={18} className="text-[#02F5D4]" />
+                                    </div>
+                                    <h3 className="text-xl font-heading font-bold text-white">Reservar Sesión</h3>
+                                </div>
+                                <div className="flex items-center justify-between mb-6">
+                                    <button onClick={prevMonth} className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white hover:bg-white/[0.08] hover:border-[#02F5D4]/30 transition-all duration-300">
                                         <ChevronLeft size={18} />
                                     </button>
                                     <h4 className="text-lg font-semibold text-white capitalize">{currentMonth.toLocaleString('es-ES', { month: 'long', year: 'numeric' })}</h4>
-                                    <button onClick={nextMonth} className="p-2 rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors">
+                                    <button onClick={nextMonth} className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white hover:bg-white/[0.08] hover:border-[#02F5D4]/30 transition-all duration-300">
                                         <ChevronRight size={18} />
                                     </button>
                                 </div>
                                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
                                     {['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].map(day => (
-                                        <div key={day} className="text-xs font-medium text-white/40 py-2">{day}</div>
+                                        <div key={day} className="text-xs font-medium text-white/20 py-2 uppercase tracking-wider">{day}</div>
                                     ))}
                                 </div>
                                 <div className="grid grid-cols-7 gap-1">
@@ -497,12 +558,17 @@ export default function ClientPage({ params }: { params: PageParams }) {
                                 </div>
                             </div>
                             {selectedDate && (
-                                <div className="px-6 pb-6">
-                                    <h4 className="text-sm font-semibold text-white mb-3">Horarios disponibles para {selectedDate}</h4>
+                                <div className="px-8 pb-8">
+                                    <div className="p-4 bg-gradient-to-r from-[#02F5D4]/5 to-[#2272FF]/5 rounded-xl border border-[#02F5D4]/10 mb-4">
+                                        <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                                            <Clock size={14} className="text-[#02F5D4]" />
+                                            Horarios disponibles para {selectedDate}
+                                        </h4>
+                                    </div>
                                     <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                                         {Array.from({ length: 17 }, (_, i) => i + 5).map(hour => (
                                             <button key={hour} onClick={() => bookSession(selectedDate, formatAMPM(hour))}
-                                                className="px-2 py-2 text-xs rounded-lg bg-gradient-to-r from-[#2272FF] to-[#02F5D4] text-white font-medium hover:shadow-lg hover:shadow-[#02F5D4]/30 transition-all">
+                                                className="px-2 py-3 text-xs rounded-xl bg-gradient-to-r from-[#2272FF] to-[#02F5D4] text-white font-bold hover:shadow-[0_0_20px_-4px_rgba(2,245,212,0.4)] hover:from-[#02F5D4] hover:to-[#2272FF] transition-all duration-300">
                                                 {formatAMPM(hour)}
                                             </button>
                                         ))}
@@ -512,8 +578,12 @@ export default function ClientPage({ params }: { params: PageParams }) {
                         </GlassCard>
 
                         <GlassCard>
-                            <div className="p-6">
-                                <h3 className="text-xl font-heading font-bold text-white mb-6">Mis Reservas</h3>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                            <div className="p-8">
+                                <h3 className="text-xl font-heading font-bold text-white mb-6 flex items-center gap-3">
+                                    <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#02F5D4] to-[#2272FF]" />
+                                    Mis Reservas
+                                </h3>
                                 {bookings.length > 0 ? (
                                     <div className="space-y-3">
                                         {bookings.map(({ id, fecha, estado }) => {
@@ -522,20 +592,22 @@ export default function ClientPage({ params }: { params: PageParams }) {
                                                 <motion.div key={id}
                                                     initial={{ opacity: newBookingId === id ? 0 : 1, y: newBookingId === id ? 10 : 0 }}
                                                     animate={{ opacity: animatingId === id ? 0 : 1, y: animatingId === id ? -10 : 0 }}
-                                                    className="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.02]">
-                                                    <div className="flex items-center gap-3">
-                                                        <Calendar className="w-5 h-5 text-[#02F5D4]" />
+                                                    className="flex items-center justify-between p-5 rounded-xl border border-white/[0.06] bg-gradient-to-r from-white/[0.02] to-transparent hover:border-white/[0.12] transition-all duration-300 group">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#02F5D4]/10 to-[#2272FF]/5 border border-[#02F5D4]/10 flex items-center justify-center">
+                                                            <Calendar className="w-5 h-5 text-[#02F5D4]" />
+                                                        </div>
                                                         <div>
                                                             <p className="text-white font-medium">{date}</p>
-                                                            <p className="text-white/50 text-sm">{time}</p>
+                                                            <p className="text-white/40 text-sm">{time}</p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-3">
-                                                        <span className={`px-2 py-1 text-xs rounded-md ${estado === 'ACTIVA' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                                                        <span className={`px-3 py-1.5 text-xs rounded-lg font-semibold ${estado === 'ACTIVA' ? 'badge-premium-green' : 'badge-premium-red'}`}>
                                                             {estado}
                                                         </span>
                                                         {estado === 'ACTIVA' && (
-                                                            <button onClick={() => cancelBooking(id)} className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors">
+                                                            <button onClick={() => cancelBooking(id)} className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:shadow-[0_0_12px_-4px_rgba(248,113,113,0.3)] transition-all duration-300">
                                                                 <X size={14} />
                                                             </button>
                                                         )}
@@ -545,7 +617,10 @@ export default function ClientPage({ params }: { params: PageParams }) {
                                         })}
                                     </div>
                                 ) : (
-                                    <p className="text-white/40 text-center py-8">No tienes reservas programadas</p>
+                                    <div className="text-center py-12">
+                                        <Calendar size={32} className="text-white/10 mx-auto mb-3" />
+                                        <p className="text-white/30 text-center">No tienes reservas programadas</p>
+                                    </div>
                                 )}
                             </div>
                         </GlassCard>
