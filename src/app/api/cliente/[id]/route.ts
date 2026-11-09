@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { denegarAccesoCliente } from '@/lib/fitness/auth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -18,13 +19,17 @@ function convertirHora12a24(hora12: string): string {
   return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
 }
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const userId = parseInt(params.id);
 
     if (isNaN(userId)) {
       return NextResponse.json({ error: 'ID de usuario inválido' }, { status: 400 });
     }
+
+    // Solo el propio cliente, su entrenador asignado o un administrador pueden ver estos datos.
+    const denegado = await denegarAccesoCliente(request, userId);
+    if (denegado) return denegado;
 
     const usuario = await prisma.usuario.findUnique({
       where: { id: userId },
@@ -56,8 +61,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
         },
       },
     });
-
-    console.log(usuario); // Agrega esta línea para depurar
 
     if (!usuario) {
       return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart, Users, CreditCard, Calendar, UserPlus, FileText, Package, History, ScrollText, Settings, UserPlus2, StickyNote, DollarSign, LogIn, Snowflake, Bell, Target, Dumbbell, TrendingUp, Award } from "lucide-react";
+import { BarChart, Users, CreditCard, Calendar, UserPlus, FileText, Package, History, ScrollText, Settings, UserPlus2, StickyNote, DollarSign, LogIn, Snowflake, Bell, Target, Dumbbell, TrendingUp, Award, Activity } from "lucide-react";
 import { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -24,6 +24,7 @@ import FreezeTab from "./_components/FreezeTab";
 import RecordatoriosTab from "./_components/RecordatoriosTab";
 import MetasTab from "./_components/MetasTab";
 import RutinasTab from "./_components/RutinasTab";
+import GestionEntrenamiento from "@/components/fitness/GestionEntrenamiento";
 import ExecutiveTab from "./_components/ExecutiveTab";
 import RetentionTab from "./_components/RetentionTab";
 
@@ -38,6 +39,7 @@ const navItems = [
   { id: "freeze", label: "Congelar", icon: <Snowflake size={18} /> },
   { id: "metas", label: "Metas", icon: <Target size={18} /> },
   { id: "rutinas", label: "Rutinas", icon: <Dumbbell size={18} /> },
+  { id: "fitness", label: "Fitness", icon: <Activity size={18} /> },
   { id: "recordatorios", label: "Recordatorios", icon: <Bell size={18} /> },
   { id: "notes", label: "Notas", icon: <StickyNote size={18} /> },
   { id: "expenses", label: "Gastos", icon: <DollarSign size={18} /> },
@@ -249,6 +251,8 @@ export default function AdminDashboard() {
         return <MetasTab />;
       case "rutinas":
         return <RutinasTab />;
+      case "fitness":
+        return <GestionEntrenamiento rol="ADMIN" />;
       case "recordatorios":
         return <RecordatoriosTab />;
       case "logs":

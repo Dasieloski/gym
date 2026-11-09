@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, X, MessageSquare, User, CreditCard, Calendar, Camera, Plus, Clock, Dumbbell, Flame, LogIn, LogOut, DollarSign, QrCode, ClipboardList } from 'lucide-react';
+import { ChevronRight, ChevronLeft, X, MessageSquare, User, CreditCard, Calendar, Camera, Plus, Clock, Dumbbell, Flame, LogIn, LogOut, DollarSign, QrCode, ClipboardList, Activity, BookOpen, TrendingUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { signOut } from "next-auth/react";
@@ -11,7 +11,7 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import GlassCard from '@/components/ui/glass-card';
 import WeightTrackingComponent from '@/components/WeightTrackingComponent';
 import { toast } from 'react-toastify';
-import RutinasView from '@/components/RutinasView';
+import FitnessModule, { SECCIONES_FITNESS, SeccionFitness } from '@/components/fitness/FitnessModule';
 
 const QRCodeSVG = dynamic(() => import('qrcode.react').then(m => ({ default: m.QRCodeSVG })), { ssr: false });
 
@@ -205,7 +205,10 @@ export default function ClientPage({ params }: { params: PageParams }) {
         { id: 'pagos', label: 'Pagos', icon: <DollarSign size={18} /> },
         { id: 'reservas', label: 'Reservas', icon: <Calendar size={18} /> },
         { id: 'peso', label: 'Mi Peso', icon: <User size={18} /> },
+        { id: 'entreno', label: 'Entrenar', icon: <Activity size={18} /> },
         { id: 'rutinas', label: 'Rutinas', icon: <ClipboardList size={18} /> },
+        { id: 'ejercicios', label: 'Ejercicios', icon: <BookOpen size={18} /> },
+        { id: 'progreso', label: 'Progreso', icon: <TrendingUp size={18} /> },
     ]
 
     return (
@@ -638,15 +641,15 @@ export default function ClientPage({ params }: { params: PageParams }) {
                     </motion.div>
                 )}
 
-                {activeTab === 'rutinas' && (
+                {SECCIONES_FITNESS.includes(activeTab as SeccionFitness) && (
+                    // Clave fija: el módulo conserva la sesión de entrenamiento al cambiar entre sus secciones.
                     <motion.div
-                        key="rutinas"
+                        key="fitness"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="space-y-6"
                     >
-                        <RutinasView />
+                        <FitnessModule seccion={activeTab as SeccionFitness} onNavegar={handleTabChange} />
                     </motion.div>
                 )}
             </AnimatePresence>

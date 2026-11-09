@@ -1,8 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { denegarAccesoCliente } from '@/lib/fitness/auth';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = params;
+    const denegado = await denegarAccesoCliente(request, parseInt(id));
+    if (denegado) return denegado;
 
     try {
         const registros = await prisma.registroPeso.findMany({
@@ -27,8 +30,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = params;
+    const denegado = await denegarAccesoCliente(request, parseInt(id));
+    if (denegado) return denegado;
     const { peso, imc, grasaCorporal, cuello, pecho, brazo, cintura, cadera, muslo, altura, gluteo } = await request.json();
 
     // Validar que altura no sea null o undefined

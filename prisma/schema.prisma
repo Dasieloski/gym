@@ -50,6 +50,8 @@ model Usuario {
   recompensaCumpleanios RecompensaCumpleanios?
   desafios             DesafioUsuario[]
   notificacionesPush   NotificacionPush[]
+  sesionesEntrenamiento SesionEntrenamiento[]
+  recordsPersonales    RecordPersonal[]
 }
 
 model Entrenador {
@@ -317,10 +319,17 @@ model Rutina {
   activa      Boolean     @default(true)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  tipo             RutinaTipo  @default(ASIGNADA)
+  plantillaOrigenId Int?
   cliente     Usuario     @relation("RutinaCliente", fields: [clienteId], references: [id])
   creador     Usuario     @relation("RutinaCreador", fields: [creadorId], references: [id])
   ejercicios  Ejercicio[]
+  plantillaOrigen  Rutina?     @relation("RutinaCopias", fields: [plantillaOrigenId], references: [id], onDelete: SetNull)
+  copias           Rutina[]    @relation("RutinaCopias")
+  sesiones         SesionEntrenamiento[]
 
+  @@index([clienteId, activa])
+  @@index([creadorId, tipo])
   @@map("Rutina")
 }
 
@@ -335,10 +344,16 @@ model Ejercicio {
   orden       Int      @default(0)
   notas       String?
   rutinaId    Int
+  catalogoId  Int?
+  descansoSeg Int?
+  duracionSeg Int?
   rutina      Rutina   @relation(fields: [rutinaId], references: [id], onDelete: Cascade)
+  catalogo    CatalogoEjercicio? @relation(fields: [catalogoId], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  @@index([rutinaId, orden])
+  @@index([catalogoId])
   @@map("Ejercicio")
 }
 
@@ -443,4 +458,142 @@ enum EstadoEquipo {
   MANTENIMIENTO
   DANADO
   RETIRADO
+}
+
+// ---------------------------------------------------------------------------
+// Módulo fitness: catálogo, sesiones de entrenamiento y récords personales
+// ---------------------------------------------------------------------------
+
+enum RutinaTipo {
+  PERSONAL
+  ASIGNADA
+  PLANTILLA
+}
+
+enum TipoMedicion {
+  PESO_REPS
+  SOLO_REPS
+  TIEMPO
+}
+
+enum EstadoSesion {
+  EN_CURSO
+  COMPLETADA
+  CANCELADA
+}
+
+enum TipoRecord {
+  PESO_MAXIMO
+  MAX_REPS
+  MAX_DURACION
+}
+
+model CatalogoEjercicio {
+  id                   Int          @id @default(autoincrement())
+  slug                 String       @unique
+  nombre               String
+  descripcion          String?
+  instrucciones        String[]
+  musculoPrincipal     String
+  musculosSecundarios  String[]
+  equipamiento         String
+  categoria            String
+  nivel                String       @default("PRINCIPIANTE")
+  tipoMedicion         TipoMedicion @default(PESO_REPS)
+  mediaUrl             String?
+  mediaLicencia        String?
+  activo               Boolean      @default(true)
+  creadoPorId          Int?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  ejerciciosRutina     Ejercicio[]
+  ejerciciosSesion     SesionEjercicio[]
+  records              RecordPersonal[]
+
+  @@index([musculoPrincipal])
+  @@index([equipamiento])
+  @@index([categoria])
+  @@map("CatalogoEjercicio")
+}
+
+model SesionEntrenamiento {
+  id           Int           @id @default(autoincrement())
+  usuarioId    Int
+  rutinaId     Int?
+  rutinaNombre String
+  diaSemana    String?
+  estado       EstadoSesion  @default(EN_CURSO)
+  claveCliente String
+  iniciadaAt   DateTime      @default(now())
+  finalizadaAt DateTime?
+  duracionSeg  Int?
+  totalSeries  Int?
+  volumenKg    Float?
+  notas        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  usuario      Usuario       @relation(fields: [usuarioId], references: [id])
+  rutina       Rutina?       @relation(fields: [rutinaId], references: [id], onDelete: SetNull)
+  ejercicios   SesionEjercicio[]
+  records      RecordPersonal[]
+
+  @@unique([usuarioId, claveCliente])
+  @@index([usuarioId, estado, iniciadaAt])
+  @@map("SesionEntrenamiento")
+}
+
+model SesionEjercicio {
+  id                  Int               @id @default(autoincrement())
+  sesionId            Int
+  orden               Int
+  catalogoId          Int?
+  nombre              String
+  tipoMedicion        TipoMedicion      @default(PESO_REPS)
+  seriesObjetivo      Int               @default(3)
+  repsObjetivo        Int?
+  pesoObjetivo        Float?
+  duracionObjetivoSeg Int?
+  descansoSeg         Int?
+  notas               String?
+  sesion              SesionEntrenamiento @relation(fields: [sesionId], references: [id], onDelete: Cascade)
+  catalogo            CatalogoEjercicio?  @relation(fields: [catalogoId], references: [id], onDelete: SetNull)
+  series              SerieRegistrada[]
+
+  @@unique([sesionId, orden])
+  @@index([catalogoId])
+  @@map("SesionEjercicio")
+}
+
+model SerieRegistrada {
+  id                Int             @id @default(autoincrement())
+  sesionEjercicioId Int
+  numero            Int
+  peso              Float?
+  repeticiones      Int?
+  duracionSeg       Int?
+  completada        Boolean         @default(false)
+  esRecord          Boolean         @default(false)
+  completadaAt      DateTime?
+  sesionEjercicio   SesionEjercicio @relation(fields: [sesionEjercicioId], references: [id], onDelete: Cascade)
+
+  @@unique([sesionEjercicioId, numero])
+  @@map("SerieRegistrada")
+}
+
+model RecordPersonal {
+  id         Int               @id @default(autoincrement())
+  usuarioId  Int
+  catalogoId Int
+  tipo       TipoRecord
+  valor      Float
+  reps       Int?
+  sesionId   Int?
+  logradoAt  DateTime          @default(now())
+  usuario    Usuario           @relation(fields: [usuarioId], references: [id])
+  catalogo   CatalogoEjercicio @relation(fields: [catalogoId], references: [id], onDelete: Cascade)
+  sesion     SesionEntrenamiento? @relation(fields: [sesionId], references: [id], onDelete: SetNull)
+
+  @@unique([usuarioId, catalogoId, tipo])
+  @@index([usuarioId, logradoAt])
+  @@map("RecordPersonal")
 }

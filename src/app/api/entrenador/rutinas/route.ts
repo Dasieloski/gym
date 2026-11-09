@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const clienteId = searchParams.get('clienteId');
 
-    let where: Record<string, unknown> = { creadorId: userId };
+    let where: Record<string, unknown> = { creadorId: userId, tipo: 'ASIGNADA' };
     if (clienteId) where.clienteId = parseInt(clienteId);
 
     const rutinas = await prisma.rutina.findMany({
@@ -48,12 +48,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Nombre y cliente requeridos' }, { status: 400 });
     }
 
+    // Solo se pueden asignar rutinas a clientes del propio entrenador.
+    const cliente = await prisma.usuario.findFirst({
+      where: { id: Number(clienteId), rol: 'CLIENTE', entrenadorAsignadoId: userId },
+      select: { id: true },
+    });
+    if (!cliente) return NextResponse.json({ error: 'Cliente no autorizado' }, { status: 404 });
+
     const rutina = await prisma.rutina.create({
       data: {
         nombre,
         descripcion,
-        clienteId,
+        clienteId: cliente.id,
         creadorId: userId,
+        tipo: 'ASIGNADA',
         ejercicios: ejercicios?.length > 0 ? {
           create: ejercicios.map((e: { nombre: string; descripcion?: string; series?: number; repeticiones?: number; peso?: number; diaSemana?: string; orden?: number; notas?: string }) => ({
             nombre: e.nombre,

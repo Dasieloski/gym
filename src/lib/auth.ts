@@ -12,8 +12,6 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials: Record<"username" | "password", string> | undefined, req: any) {
-                console.log("Credenciales recibidas:", credentials);
-
                 if (!credentials) {
                     console.log("No se proporcionaron credenciales.");
                     return null;
